@@ -17,7 +17,7 @@ var cloudant = {
 if (process.env.hasOwnProperty("VCAP_SERVICES")) {
   // Running on Bluemix. Parse out the port and host that we've been assigned.
   var env = JSON.parse(process.env.VCAP_SERVICES);
-  var host = process.env.VCAP_APP_HOST; 
+  var host = process.env.VCAP_APP_HOST;
   var port = process.env.VCAP_APP_PORT;
 
   console.log('VCAP_SERVICES: %s', process.env.VCAP_SERVICES);    
