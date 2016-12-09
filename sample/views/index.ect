@@ -7,17 +7,16 @@
 </head>
 <body>
 <div class="container">
-	<h1 id="header">High Scores</h1>
-	<table id="hiscore_table"><tbody><tr><th class="table-header">Score</th><th class="table-header">Name</th><th class="table-header">Date</th></tr></tbody></table>
-	<div style="padding-top:30px;">
-		<a href="/play" class="btn btn-default">Play!</a>
-	</div>
+	<h1 id="header"><%= @title %></h1>
+	<form action="/login" method="post">
+	<input type="text" id="name" name="name" value="<%= @name %>" />
+	<button onclick="this.form.submit();">GO!</button>
+	</form>
 </div>
 
 
 <script src="js/jquery.js" type="text/javascript"></script>
 <script src="js/bootstrap.js" type="text/javascript"></script>
-<script src="js/hiscores.js" type="text/javascript"></script>
 
 </body>
 </html>
