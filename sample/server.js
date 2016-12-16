@@ -13,17 +13,15 @@ var cloudant = {
   url : "https://f5452bb8-7d86-4198-9fa1-76a9d0a55727-bluemix:6130b19398e8fd33feaab49df054638945906fc47fe22bb25b8035a4eee31d6e@f5452bb8-7d86-4198-9fa1-76a9d0a55727-bluemix.cloudant.com" // TODO: Update		 		 
 };
 
-
 if (process.env.hasOwnProperty("VCAP_SERVICES")) {
-  // Running on Bluemix. Parse out the port and host that we've been assigned.
+  // Running on Bluemix. Parse  port and host
   var env = JSON.parse(process.env.VCAP_SERVICES);
   var host = process.env.VCAP_APP_HOST;
   var port = process.env.VCAP_APP_PORT;
 
-  console.log('VCAP_SERVICES: %s', process.env.VCAP_SERVICES);    
-
-  // Also parse out Cloudant settings.
-  cloudant = env['cloudantNoSQLDB'][0].credentials;  
+  console.log('VCAP_SERVICES: %s', process.env.VCAP_SERVICES);
+  // Also parse Cloudant settings.
+  cloudant = env['cloudantNoSQLDB'][0].credentials; 
 }
 
 var nano = require('nano')(cloudant.url);
@@ -53,7 +51,7 @@ app.use(session({
         httpOnly: false,
         maxAge: new Date(Date.now() + 60 * 60 * 1000)
     }
-})); //追加
+}));
 
 // Set path to Jade template directory
 app.set('views', __dirname + '/views');
@@ -91,6 +89,11 @@ app.post('/login', function(req, res){
   req.session.name = name;
   res.render('main.ect', {title: 'Hello ' +name });
 });
+
+// Sub module
+var api = require('./api');
+app.use('/api', api);
+
 
 // Server start
 var server = app.listen(port, function() {
