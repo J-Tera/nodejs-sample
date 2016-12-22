@@ -10,7 +10,7 @@ var http = require('http');
 var host = "localhost";
 var port = 3030;
 var cloudant = {
-  url : "https://f5452bb8-7d86-4198-9fa1-76a9d0a55727-bluemix:6130b19398e8fd33feaab49df054638945906fc47fe22bb25b8035a4eee31d6e@f5452bb8-7d86-4198-9fa1-76a9d0a55727-bluemix.cloudant.com" // TODO: Update		 		 
+  url : "https://c88ff3e4-2ea3-4a48-9763-b9919539b731-bluemix:202c0e67ef024a7ca1c3912cb9b34d0c2066be3901de75f589b7850aa671761a@c88ff3e4-2ea3-4a48-9763-b9919539b731-bluemix.cloudant.com" // TODO: Update		 		 
 };
 
 if (process.env.hasOwnProperty("VCAP_SERVICES")) {
@@ -25,7 +25,7 @@ if (process.env.hasOwnProperty("VCAP_SERVICES")) {
 }
 
 var nano = require('nano')(cloudant.url);
-var db = nano.db.use('guess_the_word_hiscores');
+var db = nano.use('sample');
 
 //Session
 var cookieParser = require('cookie-parser');
@@ -78,7 +78,7 @@ app.set('view engine', 'ect');
 app.get('/', function(req, res){
   var name = "";
   if( req.session.name && req.session.name != "") {
-	  name = req.session.name;
+    name = req.session.name;
   }
   res.render('index.ect', {title: 'Login ' + name, "name" : name});
 });
@@ -89,6 +89,21 @@ app.post('/login', function(req, res){
   req.session.name = name;
   res.render('main.ect', {title: 'Hello ' +name });
 });
+
+app.get('/list', function(req, res){
+  db.list({include_docs:true}, function(err, body) {
+    var resObject = [];
+    if (!err) {
+      body.rows.forEach(function(doc) {
+        resObject.push(doc.doc);
+      });
+    } else {
+      console.log(err);
+    }
+    res.render('list.ect', {title: 'List', 'docs' : resObject});
+  });
+});
+
 
 // Sub module
 var api = require('./api');

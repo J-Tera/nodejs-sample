@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title><%= @title %></title>
-	<link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
-	<link rel="stylesheet" href="css/main.css" type="text/css" />
-</head>
-<body>
+<% extend 'layout' %>
+
 <div class="container">
-	<h1><%= @title %></h1>
+	<h1><%- @title %></h1>
 	<div class="row">
 		<div class="col-xs-8">
 			<div><a href="/">back to top</a></div>
@@ -42,8 +36,3 @@
 		</div>
 	</div>
 </div>
-<script src="js/jquery.js" type="text/javascript"></script>
-<script src="js/bootstrap.js" type="text/javascript"></script>
-
-</body>
-</html>

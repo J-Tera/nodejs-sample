@@ -1,0 +1,16 @@
+<% extend 'layout' %>
+<div class="container">
+	<h1 id="header"><%- @title %></h1>
+	<% docsHelper = (doc) -> %>
+		<li><a href="<%- doc.url %>"><%- doc.title %></a></li>
+	<% end %>
+	<% if @docs?.length : %>
+		<ul>
+			<% for doc in @docs : %>
+				<%- docsHelper doc %>
+			<% end %>
+		</ul>
+	<% else : %>
+		<p>List is empty</p>
+	<% end %>
+</div>
