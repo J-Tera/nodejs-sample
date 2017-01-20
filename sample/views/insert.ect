@@ -1,0 +1,40 @@
+<% extend 'layout' %>
+
+<div class="container">
+	<h1 id="header"><%- @title %></h1>
+	<form id="form1" action="/insert" method="post" >
+	Name:<input id="name" name="name" type="text"/><br />
+	Title:<input id="title" name="title" type="text"/><br />
+	Url:<input id="url" name="url" type="text"/><br />
+	
+	<button id="sub">更新</button>
+	</form>
+	<hr />
+	<% docsHelper = (doc) -> %>
+		<li><a href="<%- doc.url %>"><%- doc._id %> : <%- doc.title %></a></li>
+	<% end %>
+	<% if @docs?.length : %>
+		<ul>
+			<% for doc in @docs : %>
+				<%- docsHelper doc %>
+			<% end %>
+		</ul>
+	<% else : %>
+		<p>List is empty</p>
+	<% end %>
+	
+</div>
+<script type="text/javascript">
+$(function(){
+  $('#name').on('input', function(e){
+    var parameters = { name: $(this).val() };
+      $.get( '/search',parameters, function(data) {
+        $('#title').val(data.title);
+        $('#url').val(data.url);
+    });
+  });
+  $('#sub').on('click', function(e){
+    $('#form1').submit();
+  });
+});
+</script>
