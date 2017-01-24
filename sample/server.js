@@ -6,6 +6,7 @@ var express = require('express');
 var ECT = require('ect');
 var app = express();
 var http = require('http');
+var utils = require('./utils');
 var dbutils = require('./dbutils');
 
 var host = "localhost";
@@ -86,57 +87,118 @@ app.get('/', function(req, res){
   if( req.session.name && req.session.name != "") {
     name = req.session.name;
   }
-  res.render('index.ect', {title: 'Login ' + name, "name" : name});
+  res.render('index.ect', {title: 'ようこそ ' + name, "name" : name});
 });
 
-// Bind the '/login' URL
-app.post('/login', function(req, res){
-  var name = req.body.name;
-  req.session.name = name;
-  res.render('main.ect', {title: 'Hello ' +name });
+app.get('/create', function(req, res){
+  res.render('new.ect', {title: '新規作成'});
 });
 
-//
-app.get('/insert', function(req, res){
-  dbutils.listAll(db).then(function(value) {
-    res.render('insert.ect', {title: 'insert', 'docs' : value});
-  });
+app.post('/create', function(req, res){
+  var newdoc = {};
+  newdoc._id = utils.createId();
+  newdoc.name = req.body.name;
+  newdoc.description = req.body.description;
+  var errors = [];
+  if(newdoc.name === "" ) {
+    errors.push({id:"name", msg : "Please input name"});
+  }
+  if(errors.length > 0) {
+    res.render('new.ect', {title: '新規作成', 'errors' : errors});
+    return;
+  }
+    dbutils.insert(db, newdoc)
+    .then(function() {
+      res.redirect('/update?id='+newdoc._id);
+    });
 });
 
-app.post('/insert', function(req, res){
-  var name = req.body.name;
-  var title = req.body.title;
-  var url = req.body.url;
-  //最新の文書を取得する
-  dbutils.getOne(db, name)
+app.get('/update', function(req, res){
+  var id = req.query.id;
+  if (id === undefined || id === null || id === "") {
+    res.send("Invalid doc id");
+    return;
+  }
+  dbutils.getOne(db, id)
   .then(function(doc){
-    doc._id = name;
-    doc.title = title;
-    doc.url = url;
-    return dbutils.insert(db, doc);})
-  .then(function() {
-    return dbutils.listAll(db);})
-  .then(function(docs){
-    res.render('insert.ect', {title: 'insert', 'docs' : docs});
+//    att = [];
+//    att.push({name:"AAA AAA"},{name:"BBB BBB"});
+//    doc.attendantees = att;
+    res.render('update.ect', {title: 'Update', 'doc' : doc});
   });
+  
+});
+app.post('/update', function(req, res){
+  var id = req.body.id;
+  var name = req.body.name;
+  var description = req.body.description;
+  var attendantees = req.body.attendantees;
+  console.log(attendantees);
+  var errors = [];
+  if(name === "" ) {
+    errors.push({id:"name", msg : "Please input name"});
+  }
+
+  dbutils.getOne(db, id)
+  .then(function(doc){
+    if(errors.length > 0) {
+      res.render('update.ect', {title: 'Update', 'doc' : doc, 'errors' : errors});
+      return;
+    }
+    doc.name = name;
+    doc.description = description;
+    return dbutils.insert(db, doc);
+  }).then(function(){
+    return dbutils.getOne(db, id);
+  }).then(function(doc){
+    res.render('update.ect', {title: 'Update', 'doc' : doc});
+  });
+  
 });
 
-app.get('/search', function(req, res) {
-  var name = req.query.name;
-//  var title = req.query.title;
-//  var url = req.query.url;
-  db.get(name, function(err, doc) {
-    if (!err) {
-      console.log(doc);
-      res.send(doc);
-    } else {
-      res.send({name:'',title:'',url:''});
+app.put('/adddate', function(req, res){
+  var id = req.body.id;
+  var datelist = req.body.datelist;
+  var dat = [];
+  for( i = 0; i < datelist.length; i++) {
+    if(datelist[i] !== "") {
+      dat.push(datelist[i]);
     }
+  }
+  dbutils.getOne(db, id)
+  .then(function(doc){
+    doc.datelist = dat;
+    return dbutils.insert(db, doc);
   });
-});
+}); 
+
+app.put('/addatt', function(req, res){
+  var id = req.body.id;
+  var attendantees = req.body.attendantees;
+  var att = [];
+  for( i = 0; i < attendantees.length; i++) {
+    if(attendantees[i] !== "") {
+      att.push(attendantees[i]);
+    }
+  }
+  dbutils.getOne(db, id)
+  .then(function(doc){
+    doc.attendantees = att;
+    return dbutils.insert(db, doc);
+  });
+}); 
+
+
+//// Bind the '/login' URL
+//app.post('/login', function(req, res){
+//  var name = req.body.name;
+//  req.session.name = name;
+//  res.render('main.ect', {title: 'Hello ' +name });
+//});
 
 app.get('/list', function(req, res){
-  db.list({include_docs:true}, function(err, body) {
+  var parms = {include_docs:true};
+  db.list(parms, function(err, body) {
     var resObject = [];
     if (!err) {
       body.rows.forEach(function(doc) {

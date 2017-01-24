@@ -1,0 +1,17 @@
+<% extend 'layout' %>
+
+<div class="container">
+	<h1 id="header"><%- @title %></h1>
+	
+	<a href="/">戻る</a><br />
+	<% if @errors?.length : %>
+		<% for err in @errors : %>
+			<%- err.msg %> <script type="text/javascript">$(function() {$('#<%- err.id %>_group').addClass("has-error");});</script> <br />
+		<% end %>
+	<% end %>
+	<form action="/create" method="post">
+	<div id="name_group"><label for="name" class="control-label">Name:</label><input id="name" name="name" type="text" class="form-control"/></div>
+	<div id="description_group"><label for="description" class="control-label">Description:</label><textarea id="description" name="description" rows="3" class="form-control"></textarea></div>
+	<button onclick="this.form.submit();" class="btn btn-primary">GO!</button>
+	</form>
+</div>

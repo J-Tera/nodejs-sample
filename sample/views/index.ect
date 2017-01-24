@@ -2,8 +2,14 @@
 
 <div class="container">
 	<h1 id="header"><%- @title %></h1>
-	<form action="/login" method="post">
-	<input type="text" id="name" name="name" value="<%= @name %>" />
-	<button onclick="this.form.submit();">GO!</button>
-	</form>
+	
+	ようこそ<br />
+	<a href="/create">予定を作成する</a><br />
+	
+	説明文書を記入する<br />
+	
+	
+	<a href="/list">いずれはなくすがDBにあるもの一覧</a>
+	
+	
 </div>

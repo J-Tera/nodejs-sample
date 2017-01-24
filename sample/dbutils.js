@@ -1,3 +1,4 @@
+var utils = require('./utils');
 module.exports = {
   listAll : function(db) {
     return new Promise(function(resolve, reject) {
@@ -18,8 +19,11 @@ module.exports = {
   getOne : function(db, key) {
     return new Promise(function(resolve, reject) {
       db.get(key, function(err, doc) {
+        console.log("GetOne");
+        console.log(doc);
         if (err) {//なければ新しい文書を作成
           var doc = {};
+          doc._id = utils.createId();
         }
         resolve(doc);
       });
@@ -30,6 +34,7 @@ module.exports = {
       db.insert(doc, function(err) {
         if (!err) {
         } else {//DBへのInsert失敗した時だけメッセージを出す
+          console.log(err);
           console.log("DB insert Fail");
         }
         resolve();

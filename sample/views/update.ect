@@ -1,0 +1,91 @@
+<% extend 'layout' %>
+
+<div class="container">
+	<h1 id="header"><%- @title %></h1>
+	
+	編集用のURLです。書き残しておいてください。：xxxxxxx<br />
+	参加者の方へ案内するURL：XXXXXXX<br />
+	
+	<form id="form1" action="/update" method="post">
+	<input type="hidden" id="id" name="id"  value="<%- @doc._id %>" />
+	<div id="name_group"><label for="name"  class="control-label" >Name:</label><input id="name" name="name" type="text" value="<%- @doc.name %>" class="form-control" /></div>
+	<div id="description_group"><label for="description"  class="control-label" >Description:</label><textarea id="description" name="description" rows="3"  class="form-control"><%- @doc.description %></textarea></div>
+
+	<button id="sub" class="btn btn-primary">更新</button>
+	<a href="/" class="btn btn-primary">戻る</a>
+
+
+	<hr />
+	<div class="row">
+		<div class="col-6 col-md-6">
+			候補日一覧<br />
+			<table id="date_table" class="table table-bordered">
+				<thead><tr><th>Date</th></tr></thead>
+				<% if @doc.datelist?.length : %>
+					<% for dat in @doc.datelist : %>
+				<tr><td><input type="text" name="datelist" value="<%- dat %>" /></td></tr>
+					<% end %>
+				<% end %>
+			</table>
+			<button id="adddate" class="btn btn-secondary">候補日追加</button>
+			<button id="updatedate" class="btn btn-secondary">候補日保存</button>
+		</div>
+		<div class="col-6 col-md-6">
+			参加者一覧<br />
+			<table id="att_table" class="table table-bordered">
+				<thead><tr><th>Name</th></tr></thead>
+				<% if @doc.attendantees?.length : %>
+					<% for att in @doc.attendantees : %>
+				<tr><td><input type="text" name="attendantees" value="<%- att %>" /></td></tr>
+					<% end %>
+				<% end %>
+			</table>
+			<button id="addatt" class="btn btn-secondary">参加者追加</button>
+			<button id="updateatt" class="btn btn-secondary">参加者保存</button>
+		</div>
+	</div>
+	</form>
+</div>
+<script type="text/javascript">
+var sendDateToServer = function(){
+  var datelist = [];
+  $( "input[name='datelist']" ).each(function(){datelist.push($(this).val())});
+  $.ajax({
+    type: "PUT",
+    url: "/adddate",
+    data: {'id' : $('#id').val(), 'datelist' : datelist}
+  });
+};
+var sendAttToServer = function(){
+  var attendantees = [];
+  $( "input[name='attendantees']" ).each(function(){attendantees.push($(this).val())});
+  $.ajax({
+    type: "PUT",
+    url: "/addatt",
+    data: {'id' : $('#id').val(), 'attendantees' : attendantees}
+  });
+};
+$(function(){
+  $('#adddate').on('click', function(e){
+    $('#date_table tr:last').after('<tr><td><input type="text" name="datelist" /></td></tr>');
+    sendDateToServer();
+    return false;
+  });
+  $('#updatedate').on('click', function(e){
+    sendDateToServer();
+    return false;
+  });
+  
+  $('#addatt').on('click', function(e){
+    $('#att_table tr:last').after('<tr><td><input type="text" name="attendantees" /></td></tr>');
+    sendAttToServer();
+    return false;
+  });
+  $('#updateatt').on('click', function(e){
+    sendAttToServer();
+    return false;
+  });
+
+});
+
+</script>
