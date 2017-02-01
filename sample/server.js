@@ -212,10 +212,14 @@ app.get('/list', function(req, res){
 });
 
 
+
 // Sub module
 var api = require('./api');
 app.use('/api', api);
 
+var view = require('./view');
+view.setDB(db);
+app.use('/view', view);
 
 // Server start
 var server = app.listen(port, function() {
