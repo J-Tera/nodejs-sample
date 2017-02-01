@@ -15,5 +15,8 @@
     "express-session" : "*",
     "cookie-parser" : "*",
     "body-parser" : "*"
+  },
+  "engines": {
+    "node": "7.x"
   }
 }
