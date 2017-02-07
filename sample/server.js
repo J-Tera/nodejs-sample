@@ -23,7 +23,7 @@ if (process.env.hasOwnProperty("VCAP_SERVICES")) {
 
   console.log('VCAP_SERVICES: %s', process.env.VCAP_SERVICES);
   // Also parse Cloudant settings.
-  cloudant = env['cloudantNoSQLDB'][0].credentials; 
+  cloudant = env['cloudantNoSQLDB'][0].credentials;
 }
 
 var nano = require('nano')(cloudant.url);
@@ -31,7 +31,7 @@ var db = nano.use('sample');
 
 //Session
 var cookieParser = require('cookie-parser');
-app.use(cookieParser()); 
+app.use(cookieParser());
 var bodyParser = require('body-parser');
 /** bodyParser.urlencoded(options)
  * Parses the text as URL encoded data (which is how browsers tend to send form data from regular forms set to POST)
@@ -126,7 +126,7 @@ app.get('/update', function(req, res){
 //    doc.attendantees = att;
     res.render('update.ect', {title: 'Update', 'doc' : doc});
   });
-  
+
 });
 app.post('/update', function(req, res){
   var id = req.body.id;
@@ -153,7 +153,7 @@ app.post('/update', function(req, res){
   }).then(function(doc){
     res.render('update.ect', {title: 'Update', 'doc' : doc});
   });
-  
+
 });
 
 app.put('/adddate', function(req, res){
@@ -170,7 +170,7 @@ app.put('/adddate', function(req, res){
     doc.datelist = dat;
     return dbutils.insert(db, doc);
   });
-}); 
+});
 
 app.put('/addatt', function(req, res){
   var id = req.body.id;
@@ -186,7 +186,7 @@ app.put('/addatt', function(req, res){
     doc.attendantees = att;
     return dbutils.insert(db, doc);
   });
-}); 
+});
 
 
 //// Bind the '/login' URL
@@ -228,3 +228,6 @@ var server = app.listen(port, function() {
 process.on('exit', function() {
   console.log('Server is shutting down!');
 });
+
+// for Hotspot URL page
+app.use('/event', require('./hotspot.js')( key => dbutils.getOne(db, key) ));
