@@ -1,0 +1,92 @@
+<% extend 'layout' %>
+
+<style type="text/css">
+#btne {height:4.0em}
+button {width:100%;height:100%}
+.srl {
+  writing-mode: sideways-rl;
+}
+button.srl {
+height:4.0em;
+width:2.0em
+}
+</style>
+<div class="container">
+	<h1 id="header"><%- @title %></h1>
+	<table>
+	<tr>
+		<td><button id="btn7">7</button></td>
+		<td><button id="btn8">8</button></td>
+		<td><button id="btn9">9</button></td>
+		<td><button id="btns">/</button></td>
+		<td rowspan="2"><button id="clear" class="srl">Clear</button></td>
+	</tr>
+	<tr>
+		<td><button id="btn4">4</button></td>
+		<td><button id="btn5">5</button></td>
+		<td><button id="btn6">6</button></td>
+		<td><button id="btna">*</button></td>
+	</tr>
+	<tr>
+		<td><button id="btn1">1</button></td>
+		<td><button id="btn2">2</button></td>
+		<td><button id="btn3">3</button></td>
+		<td><button id="btnm">-</button></td>
+		<td rowspan="2"><button id="btne">=</button></td>
+	</tr>
+	<tr>
+		<td colspan="2"><button id="btn0">0</button></td>
+		<td><button id="btnd">.</button></td>
+		<td><button id="btnp">+</button></td>
+	</tr>
+	</table>
+	<span id="formula"></span>
+	<span id="answer"></span>
+	<div id="message"></div>
+</div>
+<script type="text/javascript">
+<% #計算式を設定するための関数 %>
+var addToFormula = function(str) {
+  $("#message").html("");
+
+  var after =$("#formula").html();
+  if(after.endsWith("=")) {
+   after = "";
+   $("#answer").html("");
+  }
+  $("#formula").html(after+str);
+}
+$(function(){
+<% #ボタンが押されたときに計算する %>
+  $("button[id^='btn']").on('click', function(e){
+    addToFormula($(this).text());
+  });
+<% #「＝」ボタンが押されたときに合計を計算する %>
+  $("#btne").on('click', function(e){
+    var formula = $("#formula").html();
+    if(formula.endsWith("=")) {
+      formula = formula.substring(0,formula.length-1);
+    }
+    if(formula == "=") {
+      $("#answer").html("");
+    } else {
+      try {
+        $("#answer").html(eval(formula));
+      } catch (e) {
+        if (e instanceof SyntaxError) {
+          $("#message").html("Error");
+        }
+      }
+    }
+  });
+<% #Clearボタンが押されたときにクリアする %>
+  $("#clear").on('click', function(e){
+    $("#formula").html("");
+    $("#answer").html("");
+    $("#message").html("");
+  });
+
+
+});
+</script>
+

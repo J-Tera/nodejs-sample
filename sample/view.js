@@ -24,9 +24,15 @@ router.get('/view', function(req, res) {
     res.render('mainView.ect', {title: 'View', 'doc' : doc});
   });
 });
+
 router.setDB = function(_db) {
   db = _db;
 };
+
+router.get('/calc', function(req, res) {
+  res.render('calculator.ect', {title: 'Calc'});
+});
+
 
 module.exports = router;
 
