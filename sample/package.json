@@ -14,7 +14,8 @@
     "nano": "^6.2.0",
     "express-session" : "*",
     "cookie-parser" : "*",
-    "body-parser" : "*"
+    "body-parser" : "*",
+    "watson-developer-cloud": "*"
   },
   "engines": {
     "node": "7.x"

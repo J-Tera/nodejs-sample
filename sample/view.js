@@ -34,5 +34,29 @@ router.get('/calc', function(req, res) {
 });
 
 
+
+var TextToSpeechV1 = require('watson-developer-cloud/text-to-speech/v1');
+var text_to_speech;
+text_to_speech = new TextToSpeechV1 ({
+  "username": "2ca0c82b-1500-481c-8964-87681aba3287",
+  "password": "WghrxcQ8uG8y"
+});
+
+
+
+router.get('/speak', function(req, res) {
+  var text = req.query.text;
+  var params = {
+      'text': text,
+      'voice': 'ja-JP_EmiVoice'
+    };
+
+    // Pipe the synthesized text to a file.
+    text_to_speech.synthesize(params).on('error', function(error) {
+      console.log('Error:', error);
+    }).pipe(res);
+});
+
+
 module.exports = router;
 
