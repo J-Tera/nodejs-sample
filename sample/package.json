@@ -15,6 +15,7 @@
     "express-session" : "*",
     "cookie-parser" : "*",
     "body-parser" : "*",
+    "multer" : "*",
     "watson-developer-cloud": "*"
   },
   "engines": {

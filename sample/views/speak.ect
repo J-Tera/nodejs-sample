@@ -1,0 +1,10 @@
+<% extend 'layout' %>
+
+<div class="container">
+	<h1 id="header"><%- @title %></h1>
+	<form id="form1" action="./speaktext" enctype="multipart/form-data" method="post">
+	<input type="file" id="files" name="files" />
+
+	<button id="sub" class="btn btn-primary">Speak</button>
+	</form>
+</div>
