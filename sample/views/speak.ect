@@ -2,9 +2,51 @@
 
 <div class="container">
 	<h1 id="header"><%- @title %></h1>
-	<form id="form1" action="./speaktext" enctype="multipart/form-data" method="post">
+	<form id="form1" action="" enctype="multipart/form-data" method="post">
 	<input type="file" id="files" name="files" />
 
-	<button id="sub" class="btn btn-primary">Speak</button>
+	<input type="submit" id="sub" class="btn btn-primary" value="Speak" />
 	</form>
+	
+	<audio id="speak" type="audio/ogg;codecs=opus">
 </div>
+<script type="text/javascript">
+$(function() {
+  console.log("init")
+  $('#sub').on('click', function(e) {
+    console.log("Clicked")
+
+    var form = $('#form1').get()[0];
+
+    // FormData オブジェクトを作成
+    var formData = new FormData( form );
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', './speaktext', true);
+    xhr.responseType = 'arraybuffer';
+    xhr.onload = function(e) {
+        // ArrayBufferで返ってくる
+        console.log(this.response.byteLength);
+        
+        if (this.status == 200){
+        //------- [2] -------
+        view = new Uint8Array(this.response)
+        //------- [3] -------
+        blob = new Blob([view], { "type" : "audio/ogg;codecs=opus" })
+        //------- [4] -------
+        URL = window.URL || window.webkitURL
+        audio = $('#speak').get(0);
+        audio.src = URL.createObjectURL(blob);
+        audio.controls =true;
+        audio.play();
+        return false;
+        }
+        
+    };
+
+    xhr.send(formData);
+
+    return false;
+  });
+});
+</script>

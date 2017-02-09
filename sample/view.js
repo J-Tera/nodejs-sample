@@ -67,7 +67,7 @@ var storage = multer.memoryStorage();
 var upload = multer({ storage: storage });
 
 router.post('/speaktext', upload.single('files'), function(req, res) {
-  //console.log(req.file.buffer.toString());
+//console.log(req.file.buffer.toString());
 //  req.file.buffer.toString().split("\n").forEach(function(str){
 //    console.log(str);
 //  });
