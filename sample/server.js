@@ -230,4 +230,12 @@ process.on('exit', function() {
 });
 
 // for Hotspot URL page
-app.use('/event', require('./hotspot.js')( key => dbutils.getOne(db, key) ));
+app.use('/event', require('./hotspot.js')( 
+	key => dbutils.getOne(db, key) 
+));
+
+// for status update 
+app.use('/status', require('./status.js')( 
+	key => dbutils.getOne(db, key),
+	event => dbutils.insert(db, event)
+));
