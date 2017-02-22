@@ -23,12 +23,16 @@
   <% for date in @event.datelist : %>
      <tr>
          <td rowspan="3"><%- date %></td>
-         <% reply = [{action: '出席', api: '/apix'},
-                     {action: '欠席', api: '/apiy'},
-                     {action: '保留', api: '/apiz'}] %>
+         <% reply = [{action: '出席', status: '0'},
+                     {action: '欠席', status: '1'},
+                     {action: '保留', status: '2'}] %>
          <% for rep in reply : %>
            <td><%- rep.action %></td>
-           <td><%= '"' + @scheme + '://' + @host + rep.api + '?id=' + @id + '&date=' + date + '&name=" + @Left(@V3UserName;"/")' %></td></tr><tr>
+           <td><%= '"' + @scheme + '://' + @host + '/status/api'
+                       + '?id=' + @id
+                       + '&date=' + date
+                       + '&status=' + rep.status
+                       + '&name=" + @Left(@V3UserName;"/")' %></td></tr><tr>
          <% end %>
      </tr>
   <% end %>
