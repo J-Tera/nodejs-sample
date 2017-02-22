@@ -1,0 +1,50 @@
+<% extend 'layout' %>
+
+<div class="container">
+	<h1 id="header"><%- @title %></h1>
+	
+	<a href="/">戻る</a><br />
+	<% if @errors?.length : %>
+		<% for err in @errors : %>
+			<%- err.msg %> <script type="text/javascript">$(function() {$('#<%- err.id %>_group').addClass("has-error");});</script> <br />
+		<% end %>
+	<% end %>
+	
+
+<h1>以下のボタンを押したときにDBを更新</h1> 
+
+	<div class="row">
+		<div class="col-12 col-md-12">
+			<table id="date_table" class="table table-bordered">
+		<tr>
+		<td></td>
+		<td align="center" colspan="3" rowspan="1">回答</td>
+		</tr>
+
+				<% for dat in @doc.datelist : %>
+				<tr><td align="center" ><%- dat %></td>
+					<td align="center" ><button id ="clickmaru" class="button" class="btn btn-primary">●</button></td>
+					<td align="center" ><button id ="clicksquare" class="btn btn-primary">△</button></td>
+					<td align="center" ><button id ="clickbatsu" class="btn btn-primary">×</button></td>
+				</tr><%end%></form>
+
+
+		</div>
+	</div>
+</table>
+
+<a href="/"><button onclick="this.form.submit();" class="btn btn-primary">Close</button>
+<script type="text/javascript">
+
+$('#clickmaru').click(function(){
+	$("button").toggleClass("active",true);
+});
+
+$('#clicksquare').click(function(){
+$('#clicksquare').css('background-color','pink');
+});
+
+$('#clickbatsu').click(function(){
+$('#clickbatsu').css('background-color','pink');
+});
+</script>

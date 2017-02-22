@@ -94,6 +94,10 @@ app.get('/create', function(req, res){
   res.render('new.ect', {title: '新規作成'});
 });
 
+//app.get('/shukei', function(req, res){
+//  res.render('shukei.ect', {title: '集計'+ doc:'doc'});
+//});
+
 app.post('/create', function(req, res){
   var newdoc = {};
   newdoc._id = utils.createId();
@@ -105,6 +109,11 @@ app.post('/create', function(req, res){
   }
   if(errors.length > 0) {
     res.render('new.ect', {title: '新規作成', 'errors' : errors});
+    return;
+  }
+  
+    if(errors.length > 0) {
+    res.render('shukei.ect', {title: '集計', 'errors' : errors});
     return;
   }
     dbutils.insert(db, newdoc)
@@ -216,6 +225,10 @@ app.get('/list', function(req, res){
 // Sub module
 var api = require('./api');
 app.use('/api', api);
+
+var shukei = require('./shukei');
+shukei.setDB(db);
+app.use('/shukei', shukei);
 
 var view = require('./view');
 view.setDB(db);
