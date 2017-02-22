@@ -74,7 +74,6 @@ app.set('sounds', __dirname + '/sounds');
 
 // Set path to static files
 app.use(express.static(__dirname + '/public'));
-
 app.engine('ect', ECT({ watch: true, root: __dirname + '/views', ext: '.ect' }).render);
 app.set('view engine', 'ect');
 
@@ -90,37 +89,37 @@ app.get('/', function(req, res){
   res.render('index.ect', {title: 'ようこそ ' + name, "name" : name});
 });
 
-app.get('/create', function(req, res){
-  res.render('new.ect', {title: '新規作成'});
-});
 
 //app.get('/shukei', function(req, res){
 //  res.render('shukei.ect', {title: '集計'+ doc:'doc'});
 //});
 
-app.post('/create', function(req, res){
-  var newdoc = {};
-  newdoc._id = utils.createId();
-  newdoc.name = req.body.name;
-  newdoc.description = req.body.description;
-  var errors = [];
-  if(newdoc.name === "" ) {
-    errors.push({id:"name", msg : "Please input name"});
-  }
-  if(errors.length > 0) {
-    res.render('new.ect', {title: '新規作成', 'errors' : errors});
-    return;
-  }
-  
-    if(errors.length > 0) {
-    res.render('shukei.ect', {title: '集計', 'errors' : errors});
-    return;
-  }
-    dbutils.insert(db, newdoc)
-    .then(function() {
-      res.redirect('/update?id='+newdoc._id);
-    });
-});
+// Comment by Tanibu
+//
+//app.get('/create', function(req, res){
+//  res.render('new.ect', {title: '新規作成'});
+//});
+//
+//app.post('/create', function(req, res){
+//  var newdoc = {};
+//  newdoc._id = utils.createId();
+//  newdoc.name = req.body.name;
+//  newdoc.description = req.body.description;
+//  var errors = [];
+//  if(newdoc.name === "" ) {
+//    errors.push({id:"name", msg : "Please input name"});
+//  }
+//  if(errors.length > 0) {
+//    res.render('new.ect', {title: '新規作成', 'errors' : errors});
+//    return;
+//  }
+//    dbutils.insert(db, newdoc)
+//    .then(function() {
+//      res.redirect('/update?id='+newdoc._id);
+//    });
+//});
+//
+// Comment by Tanibu
 
 app.get('/update', function(req, res){
   var id = req.query.id;
@@ -234,6 +233,12 @@ var view = require('./view');
 view.setDB(db);
 app.use('/view', view);
 
+// Add by Tanibu
+var create = require('./create');;
+app.use('/', create);
+// Add by Tanibu
+
+
 // Server start
 var server = app.listen(port, function() {
   console.log('Server running on port %d on host %s', server.address().port, host);
@@ -241,7 +246,6 @@ var server = app.listen(port, function() {
 process.on('exit', function() {
   console.log('Server is shutting down!');
 });
-
 // for Hotspot URL page
 app.use('/event', require('./hotspot.js')( 
 	key => dbutils.getOne(db, key) 
