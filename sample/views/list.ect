@@ -3,7 +3,7 @@
 	<h1 id="header"><%- @title %></h1>
 	<a href="/">Topへ</a><br />
 	<% docsHelper = (doc) -> %>
-		<tr><td class="col-md-1"><a href="/delete?id=<%- doc._id %>"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a></td><td><a href="/update?id=<%- doc._id %>"><%- doc._id %></a></td><td><%- doc.name %></td><td><%- doc.description %></td></tr>
+		<tr><td class="col-md-1"><a href="/delete?id=<%- doc._id %>"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a></td><td><a href="/update?id=<%- doc._id %>"><%- doc._id %></a><a href="/view/view?id=<%- doc._id %>">View:<%- doc._id %></a></td><td><%- doc.name %></td><td><%- doc.description %></td></tr>
 	<% end %>
 	<% if @docs?.length : %>
 		<table class="table table-bordered">
