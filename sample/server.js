@@ -89,6 +89,11 @@ app.get('/', function(req, res){
   res.render('index.ect', {title: 'ようこそ ' + name, "name" : name});
 });
 
+
+//app.get('/shukei', function(req, res){
+//  res.render('shukei.ect', {title: '集計'+ doc:'doc'});
+//});
+
 // Comment by Tanibu
 //
 //app.get('/create', function(req, res){
@@ -220,6 +225,10 @@ app.get('/list', function(req, res){
 var api = require('./api');
 app.use('/api', api);
 
+var shukei = require('./shukei');
+shukei.setDB(db);
+app.use('/shukei', shukei);
+
 var view = require('./view');
 view.setDB(db);
 app.use('/view', view);
@@ -237,3 +246,13 @@ var server = app.listen(port, function() {
 process.on('exit', function() {
   console.log('Server is shutting down!');
 });
+// for Hotspot URL page
+app.use('/event', require('./hotspot.js')( 
+	key => dbutils.getOne(db, key) 
+));
+
+// for status update 
+app.use('/status', require('./status.js')( 
+	key => dbutils.getOne(db, key),
+	event => dbutils.insert(db, event)
+));

@@ -31,7 +31,7 @@
 					<% NG[dat] = 0; %>
 					<th><%- dat %></th>
 					<% end %>
-					<th>金額シュミレーション</th>
+					<th>金額シュミレーション<br /><a onclick="PopupCenter('./calc','計算機',80,250);return false;">計算機起動</a></th>
 					<th>金額シュミレーション(合計：<input type="text" size="10" id="total_keisha" />)<br />以下の欄には比率を入れてください。</th>
 					</tr>
 				<% end %>
@@ -74,6 +74,7 @@
 	</div>
 </div>
 <script type="text/javascript">
+<% #合計金額計算用関数 %>
 var calcAmount = function(){
   var amount = 0;
   $("input[name^='amount']").each(function(){
@@ -85,6 +86,7 @@ var calcAmount = function(){
 //  console.log(amount);
   $("#amountAll").html(amount);
 }
+<% #割合にそって金額計算する用関数 %>
 var calcKeisha = function(){
   var amount = parseFloat($("#total_keisha").val());
   var total = 0.0;
@@ -106,16 +108,38 @@ var calcKeisha = function(){
 }
 
 $(function(){
+<% #合計金額計算用入力inputに変更があるたびに、合計金額を計算する %>
   $("input[name^='amount']").on('input', function(e){
     calcAmount();
   });
+<% #割合用入力inputに変更があるたびに、金額を計算する %>
   $("input[name^='keisha']").on('input', function(e){
     calcKeisha();
   });
+<% #割合用の合計金額inputに変更があるたびに、金額を計算する %>
   $("#total_keisha").on('input', function(e){
     calcKeisha();
   });
 });
+
+<% #計算機をPopupするための関数 %>
+function PopupCenter(url, title, w, h) {
+    // Fixes dual-screen position                         Most browsers      Firefox
+    var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+    var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+
+    var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+    var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+    var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+    var top = ((height / 2) - (h / 2)) + dualScreenTop;
+    var newWindow = window.open(url, title, 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+    // Puts focus on the newWindow
+    if (window.focus) {
+        newWindow.focus();
+    }
+}
 
 </script>
 

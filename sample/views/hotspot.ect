@@ -1,0 +1,49 @@
+<% extend 'layout.ect' %>
+
+<header>
+<h1><%- @event.name %></h1>
+<p><%- @event.description %></p>
+<p> 編集用 URL : <a href='<%- @scheme %>://<%- @host %>/update?id=<%- @id %>'>
+  <%- @scheme %>://<%- @host %>/update?id=<%- @id %></a> </p>
+<p> 案内用 URL : <a href='<%- @scheme %>://<%- @host %>/view/view?id=<%- @id %>'>
+  <%- @scheme %>://<%- @host %>/view/view?id=<%- @id %></a> </p>
+<h3 style="color:red"> 重要 </h3>
+<p> 上記 URL は会議情報に再度アクセスするために必要です。 <br> 大切に保管してください。 </p>
+</header>
+
+<article>
+<section>
+<h1> Hotspot Link </h1>
+  <table class='table-bordered'>
+  <tr>
+     <th> 候補日 </th>
+     <th> 出欠 </th>
+     <th> 回答用リンク </th>
+  </tr>
+  <% for date in @event.datelist : %>
+     <tr>
+         <td rowspan="3"><%- date %></td>
+         <% reply = [{action: '出席', status: '0'},
+                     {action: '欠席', status: '1'},
+                     {action: '保留', status: '2'}] %>
+         <% for rep in reply : %>
+           <td><%- rep.action %></td>
+           <td><%= '"' + @scheme + '://' + @host + '/status/api'
+                       + '?id=' + @id
+                       + '&date=' + date
+                       + '&status=' + rep.status
+                       + '&name=" + @Left(@V3UserName;"/")' %></td></tr><tr>
+         <% end %>
+     </tr>
+  <% end %>
+  </table>
+</section>
+
+<section>
+</section>
+
+</article>
+
+
+<footer>
+</footer>
