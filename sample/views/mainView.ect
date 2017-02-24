@@ -74,6 +74,9 @@
 	</div>
 </div>
 <script type="text/javascript">
+function escapeSelectorString(val){
+  return val.replace(/[ !"#$%&'()*+,.\/:;<=>?@\[\\\]^`{|}~]/g, "\\$&");
+}
 <% #合計金額計算用関数 %>
 var calcAmount = function(){
   var amount = 0;
@@ -100,9 +103,9 @@ var calcKeisha = function(){
   $("input[name^='keisha']").each(function(){
     var value = parseFloat($(this).val());
     if( !isNaN(value)) {
-      $("#"+$(this).attr("name")).html(" =>金額 : "+(amount/total*value));
+      $("#"+escapeSelectorString($(this).attr("name"))).html(" =>金額 : "+(amount/total*value));
     } else {
-      $("#"+$(this).attr("name")).html("");
+      $("#"+escapeSelectorString($(this).attr("name"))).html("");
     }
   });
 }
