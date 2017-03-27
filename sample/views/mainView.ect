@@ -19,6 +19,7 @@
 	<h2>参加者一覧</h2>
 	<div class="row">
 		<div class="col-12 col-md-12">
+			<button id="addPeople"><span class="glyphicon glyphicon-plus"></button>
 			<table id="date_table" class="table table-bordered">
 				<% OK = {}; %>
 				<% PEND = {}; %>
@@ -37,7 +38,7 @@
 				<% end %>
 				<% if @doc.statuslist?.length : %>
 					<% for status in @doc.statuslist : %>
-					<tr><td><a href="/shukei/shukei?id=<%- @doc._id %>&name=<%- status.name %>"><%- status.name %></a></td>
+					<tr><td><a class="dialog" href="/shukei/shukei?id=<%- @doc._id %>&name=<%- status.name %>"><%- status.name %></a></td>
 						<% if @doc.datelist?.length : %>
 							<% for dat in @doc.datelist : %>
 								<% if status[dat] == "○" : %>
@@ -73,10 +74,44 @@
 		</div>
 	</div>
 </div>
+<!-- Default bootstrap modal example -->
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal-dialog modal-lg">
+   <div class="modal-content">
+     <div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+       <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+     </div>
+     <div class="modal-body">
+     </div>
+     <div class="modal-footer">
+       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+     </div>
+   </div>
+ </div>
+</div>
+
 <script type="text/javascript">
 function escapeSelectorString(val){
   return val.replace(/[ !"#$%&'()*+,.\/:;<=>?@\[\\\]^`{|}~]/g, "\\$&");
 }
+$("#addPeople").on("click", function(e){
+		$("#myModalLabel").text("asdfsafdasdf");
+	    $("#myModal").find(".modal-body").load("/shukei/shukei?id=<%- @doc._id %>&name=asdfsafdasdf");
+$("#myModal").modal();
+
+});
+
+$(".dialog").on("click", function(e){
+console.log(e);
+	    var link = $(e.currentTarget);
+	    $("#myModalLabel").text(link.text());
+	    $("#myModal").find(".modal-body").load(link.attr("href"));
+	$("#myModal").modal();
+	e.preventDefault();
+
+});
+
 <% #合計金額計算用関数 %>
 var calcAmount = function(){
   var amount = 0;
