@@ -6,13 +6,20 @@
 		<td></td>
 		<td align="center" colspan="3" rowspan="1">回答</td>
 		</tr>
+				<% status = null %>
+				<% for s in @doc.statuslist : %>
+				<% if s.name == @name : %>
+				<%  status = s %>
+				<% end %>
+				<% end %>
 
 				<% for dat in @doc.datelist : %>
 				<tr><td align="center" ><%- dat %></td>
-					<td align="center" ><button id="clickmaru_<%- dat %>" data-date="<%- dat %>" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok-sign"></span></button></td>
-					<td align="center" ><button id="clicksquare_<%- dat %>" data-date="<%- dat %>" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-question-sign"></span></button></td>
-					<td align="center" ><button id="clickbatsu_<%- dat %>" data-date="<%- dat %>" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-remove-sign"></span></button></td>
-				</tr><%end%></form>
+					<td align="center" ><button id="clickmaru_<%- dat %>" data-date="<%- dat %>" class="btn btn-primary btn-lg" <% if status != null && status[dat] == "○" : %>style="background-color: pink;"<%end%> ><span class="glyphicon glyphicon-ok-sign"></span></button></td>
+					<td align="center" ><button id="clicksquare_<%- dat %>" data-date="<%- dat %>" class="btn btn-primary btn-lg" <% if status != null && status[dat] == "△" : %>style="background-color: pink;"<%end%> ><span class="glyphicon glyphicon-question-sign"></span></button></td>
+					<td align="center" ><button id="clickbatsu_<%- dat %>" data-date="<%- dat %>" class="btn btn-primary btn-lg" <% if status != null && status[dat] == "×" : %>style="background-color: pink;"<%end%> ><span class="glyphicon glyphicon-remove-sign"></span></button></td>
+				</tr>
+				<%end%>
 
 
 		</div>
@@ -20,22 +27,37 @@
 </table>
 
 <script type="text/javascript">
+function selectorEscape(val){
+    return val.replace(/[ !"#$%&'()*+,.\/:;<=>?@\[\\\]^`{|}~]/g, '\\$&');
+}
 $("button[id^='clickmaru_']").on('click', function(e){
 	$(e.currentTarget).css('background-color','pink');
-	var d = $(e.currentTarget).attr('data-date');
+	var d = selectorEscape($(e.currentTarget).attr('data-date'));
 	$('#clicksquare_'+d).css('background-color','');
 	$('#clickbatsu_'+d).css('background-color','');
+	$.get("/status/api", { id: "<%- @doc._id %>", date: $(e.currentTarget).attr('data-date'), name: "<%- @name %>", status: 0 } )
+	.done(function( data ) {
+//    alert( "Data Loaded: " + data );
+  });
 });
 $("button[id^='clicksquare_']").on('click', function(e){
 	$(e.currentTarget).css('background-color','pink');
-	var d = $(e.currentTarget).attr('data-date');
+	var d = selectorEscape($(e.currentTarget).attr('data-date'));
 	$('#clickmaru_'+d).css('background-color','');
 	$('#clickbatsu_'+d).css('background-color','');
+		$.get("/status/api", { id: "<%- @doc._id %>", date: $(e.currentTarget).attr('data-date'), name: "<%- @name %>", status: 2 } )
+	.done(function( data ) {
+//    alert( "Data Loaded: " + data );
+  });
 });
 $("button[id^='clickbatsu_']").on('click', function(e){
 	$(e.currentTarget).css('background-color','pink');
-	var d = $(e.currentTarget).attr('data-date');
+	var d = selectorEscape($(e.currentTarget).attr('data-date'));
 	$('#clickmaru_'+d).css('background-color','');
 	$('#clicksquare_'+d).css('background-color','');
+		$.get("/status/api", { id: "<%- @doc._id %>", date: $(e.currentTarget).attr('data-date'), name: "<%- @name %>", status: 1 } )
+	.done(function( data ) {
+//    alert( "Data Loaded: " + data );
+  });
 });
 </script>

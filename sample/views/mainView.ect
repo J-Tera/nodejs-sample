@@ -38,7 +38,7 @@
 				<% end %>
 				<% if @doc.statuslist?.length : %>
 					<% for status in @doc.statuslist : %>
-					<tr><td><a class="dialog" href="/shukei/shukei?id=<%- @doc._id %>&name=<%- status.name %>"><%- status.name %></a></td>
+					<tr><td><a class="dialog" href="/shukei/shukei?id=<%- @doc._id %>&name=<%- status.name %>" data-name="<%- status.name %>"><%- status.name %></a></td>
 						<% if @doc.datelist?.length : %>
 							<% for dat in @doc.datelist : %>
 								<% if status[dat] == "○" : %>
@@ -95,18 +95,23 @@
 function escapeSelectorString(val){
   return val.replace(/[ !"#$%&'()*+,.\/:;<=>?@\[\\\]^`{|}~]/g, "\\$&");
 }
+
 $("#addPeople").on("click", function(e){
-		$("#myModalLabel").text("asdfsafdasdf");
-	    $("#myModal").find(".modal-body").load("/shukei/shukei?id=<%- @doc._id %>&name=asdfsafdasdf");
+		var name = prompt("名前を入れてください。")
+		$("#myModalLabel").text(name);
+	    $("#myModal").find(".modal-body").load("/shukei/shukei?id=<%- @doc._id %>&name="+encodeURIComponent(name));
 $("#myModal").modal();
 
 });
+$("#myModal").on("hidden.bs.modal", function () {
+    location.reload();
+});
 
 $(".dialog").on("click", function(e){
-console.log(e);
 	    var link = $(e.currentTarget);
+	    $("#myModal").find(".modal-body").html("");
 	    $("#myModalLabel").text(link.text());
-	    $("#myModal").find(".modal-body").load(link.attr("href"));
+	    $("#myModal").find(".modal-body").load("/shukei/shukei?id=<%- @doc._id %>&name="+encodeURIComponent(link.attr("data-name")));
 	$("#myModal").modal();
 	e.preventDefault();
 

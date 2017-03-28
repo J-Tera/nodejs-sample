@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 var express = require('express');
@@ -7,7 +7,7 @@ var router = express.Router();
 var dbutils = require('./dbutils');
 var db;
 
-// 
+//
 //router.use(function timeLog(req, res, next) {
 ////  console.log('Time: ', Date.now());
 //  next();
@@ -19,9 +19,14 @@ router.get('/shukei', function(req, res) {
     res.send("Invalid doc id");
     return;
   }
+  var name = req.query.name;
+  if (name === undefined || name === null || name === "") {
+	    res.send("Invalid name");
+	    return;
+	  }
   dbutils.getOne(db, id)
   .then(function(doc){
-    res.render('shukei.ect', {title: 'shukei', 'doc' : doc});
+    res.render('shukei.ect', {title: 'shukei', 'doc' : doc, 'name' : name});
   });
 });
 
