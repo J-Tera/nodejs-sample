@@ -9,9 +9,9 @@
 
 				<% for dat in @doc.datelist : %>
 				<tr><td align="center" ><%- dat %></td>
-					<td align="center" ><button id ="clickmaru_<%- dat %>" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok-sign"></span></button></td>
-					<td align="center" ><button id ="clicksquare_<%- dat %>" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-question-sign"></span></button></td>
-					<td align="center" ><button id ="clickbatsu_<%- dat %>" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-remove-sign"></span></button></td>
+					<td align="center" ><button id="clickmaru_<%- dat %>" data-date="<%- dat %>" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok-sign"></span></button></td>
+					<td align="center" ><button id="clicksquare_<%- dat %>" data-date="<%- dat %>" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-question-sign"></span></button></td>
+					<td align="center" ><button id="clickbatsu_<%- dat %>" data-date="<%- dat %>" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-remove-sign"></span></button></td>
 				</tr><%end%></form>
 
 
@@ -21,23 +21,21 @@
 
 <script type="text/javascript">
 $("button[id^='clickmaru_']").on('click', function(e){
-if($(e.currentTarget).css('background-color') == 'rgb(255, 192, 203)') {
-	$(e.currentTarget).css('background-color','');
-} else {
-	$(e.currentTarget).css('background-color','rgb(255, 192, 203)');
-}
+	$(e.currentTarget).css('background-color','pink');
+	var d = $(e.currentTarget).attr('data-date');
+	$('#clicksquare_'+d).css('background-color','');
+	$('#clickbatsu_'+d).css('background-color','');
 });
-
-
-$('#clickmaru').click(function(){
-	$("button").toggleClass("active",true);
+$("button[id^='clicksquare_']").on('click', function(e){
+	$(e.currentTarget).css('background-color','pink');
+	var d = $(e.currentTarget).attr('data-date');
+	$('#clickmaru_'+d).css('background-color','');
+	$('#clickbatsu_'+d).css('background-color','');
 });
-
-$('#clicksquare').click(function(){
-$('#clicksquare').css('background-color','pink');
-});
-
-$('#clickbatsu').click(function(){
-$('#clickbatsu').css('background-color','pink');
+$("button[id^='clickbatsu_']").on('click', function(e){
+	$(e.currentTarget).css('background-color','pink');
+	var d = $(e.currentTarget).attr('data-date');
+	$('#clickmaru_'+d).css('background-color','');
+	$('#clicksquare_'+d).css('background-color','');
 });
 </script>
