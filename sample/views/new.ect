@@ -13,21 +13,22 @@
 		<div id="name_group"><label for="name" class="control-label">Name:</label><input id="name" name="name" type="text" class="form-control"/></div>
 		<div id="description_group"><label for="description" class="control-label">Description:</label><textarea id="description" name="description" rows="3" class="form-control"></textarea></div>
 		<div id="option"><label for="option" class="control-label">Option:</label></div>
-	<script>
-	function add()
-	{
-		var date = document.createElement("div");
-		date.innerHTML = '<input id="option" name="option" type="text" class="form-control"/>';
-		var datelist = document.getElementById("option");
-		datelist.appendChild(date);
-	}
-	</script>
+
 	<div id = "option">
 	</div>
-	<button onclick="add();" class="btn btn-default">＋</button>
+	<button type="button" onclick="add();" class="btn btn-default">＋</button>
 	<br></br>
 	<button onclick="this.form.submit();" class="btn btn-primary">作成</button>
 	<button type="reset" class="btn btn-primary">リセット</button>
 	</form>
 
 </div>
+<script>
+function add()
+{
+	var date = document.createElement("div");
+	date.innerHTML = '<input id="option" name="option" type="text" class="form-control"/>';
+	var datelist = document.getElementById("option");
+	datelist.appendChild(date);
+}
+</script>

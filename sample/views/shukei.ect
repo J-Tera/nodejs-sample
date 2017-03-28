@@ -7,11 +7,13 @@
 		<td align="center" colspan="3" rowspan="1">回答</td>
 		</tr>
 				<% status = null %>
+				<% if @doc.statuslist?.length : %>
 				<% for s in @doc.statuslist : %>
 				<% if s.name == @name : %>
 				<%  status = s %>
 				<% end %>
 				<% end %>
+				<%end%>
 
 				<% for dat in @doc.datelist : %>
 				<tr><td align="center" ><%- dat %></td>

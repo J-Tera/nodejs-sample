@@ -20,6 +20,7 @@
      <th> 出欠 </th>
      <th> 回答用リンク </th>
   </tr>
+  <% if @event.datelist?.length : %>
   <% for date in @event.datelist : %>
      <tr>
          <td rowspan="3"><%- date %></td>
@@ -35,6 +36,7 @@
                        + '&name=" + @Left(@V3UserName;"/")' %></td></tr><tr>
          <% end %>
      </tr>
+  <% end %>
   <% end %>
   </table>
 </section>

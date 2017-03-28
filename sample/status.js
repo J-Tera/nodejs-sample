@@ -5,12 +5,12 @@ const router = require('express').Router();
 const statusSymbols = ['○', '×', '△'];
 
 const genNewStatus = (name, date, status) => {
-	return { name: name, [date]: statusSymbols[status] };
+	return [{ name: name, [date]: statusSymbols[status] }];
 }
 
 const genNewStatusList = (stlist, name, date, status) => {
 	if (! stlist) return genNewStatus(name, date, status);
-	
+
 	const updStatus = i => {
 		if (! stlist[i]) {
 			stlist[i] = genNewStatus(name, date, status);

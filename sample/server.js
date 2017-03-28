@@ -234,7 +234,8 @@ view.setDB(db);
 app.use('/view', view);
 
 // Add by Tanibu
-var create = require('./create');;
+var create = require('./create');
+create.setDB(db);
 app.use('/', create);
 // Add by Tanibu
 
@@ -247,12 +248,12 @@ process.on('exit', function() {
   console.log('Server is shutting down!');
 });
 // for Hotspot URL page
-app.use('/event', require('./hotspot.js')( 
-	key => dbutils.getOne(db, key) 
+app.use('/event', require('./hotspot.js')(
+	key => dbutils.getOne(db, key)
 ));
 
-// for status update 
-app.use('/status', require('./status.js')( 
+// for status update
+app.use('/status', require('./status.js')(
 	key => dbutils.getOne(db, key),
 	event => dbutils.insert(db, event)
 ));

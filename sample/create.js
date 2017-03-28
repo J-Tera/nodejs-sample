@@ -31,12 +31,23 @@ router.post('/create', function(req, res){
 	    res.render('new.ect', {title: '新規作成', 'errors' : errors});
 	    return;
 	  }
+	  var datelist = req.body.option;
+	  var dat = [];
+	  for( i = 0; i < datelist.length; i++) {
+	    if(datelist[i] !== "") {
+	      dat.push(datelist[i]);
+	    }
+	  }
+	  newdoc.datelist = dat;
+
 	    dbutils.insert(db, newdoc)
 	    .then(function() {
-	      res.redirect('/update?id='+newdoc._id);
+	      res.redirect('/event/hotspot?id='+newdoc._id);
 	    });
 	});
-
+router.setDB = function(_db) {
+	  db = _db;
+};
 module.exports = router;
 
 
