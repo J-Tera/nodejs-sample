@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 var express = require('express');
@@ -7,7 +7,7 @@ var router = express.Router();
 var dbutils = require('./dbutils');
 var db;
 
-// 
+//
 //router.use(function timeLog(req, res, next) {
 ////  console.log('Time: ', Date.now());
 //  next();
@@ -21,7 +21,7 @@ router.get('/view', function(req, res) {
   }
   dbutils.getOne(db, id)
   .then(function(doc){
-    res.render('mainView.ect', {title: 'View', 'doc' : doc});
+    res.render('mainView.ect', {'title': 'View', 'doc' : doc, 'protocol': req.protocol, 'host': req.headers.host});
   });
 });
 
@@ -60,7 +60,7 @@ router.get('/speaktext', function(req, res) {
 });
 
 /**For file upload
- * 
+ *
  */
 var multer = require('multer');
 var storage = multer.memoryStorage();
@@ -71,8 +71,8 @@ router.post('/speaktext', upload.single('files'), function(req, res) {
 //  req.file.buffer.toString().split("\n").forEach(function(str){
 //    console.log(str);
 //  });
-  
-  
+
+
   var params = {
       'text': req.file.buffer.toString(),
       'voice': 'ja-JP_EmiVoice'

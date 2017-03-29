@@ -6,9 +6,11 @@
 		<tr>
 		<td class="col-md-1"><a href="/delete?id=<%- doc._id %>"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></a></td>
 		<td>
-		<a href="/update?id=<%- doc._id %>"><%- doc._id %></a>&nbsp;
-		<a href="/event/hotspot?id=<%- doc._id %>">Hotspot:<%- doc._id %></a>&nbsp;
-		<a href="/view/view?id=<%- doc._id %>">View:<%- doc._id %></a></td>
+			<a href="/update?id=<%- doc._id %>"><%- doc._id %></a>&nbsp;
+			<a href="/event/hotspot?id=<%- doc._id %>">Hotspot:<%- doc._id %></a>&nbsp;
+			<a href="/view/view?id=<%- doc._id %>">View:<%- doc._id %></a>&nbsp;
+			<a href="/kekka?id=<%- doc._id %>">Kekka:<%- doc._id %></a>&nbsp;
+		</td>
 		<td><%- doc.name %></td><td><%- doc.description %></td></tr>
 	<% end %>
 	<% if @docs?.length : %>

@@ -195,8 +195,37 @@ app.put('/addatt', function(req, res){
     return dbutils.insert(db, doc);
   });
 });
-
-
+app.get('/kekka', function(req, res){
+  var id = req.query.id;
+  if (id === undefined || id === null || id === "") {
+    res.send("Invalid doc id");
+    return;
+  }
+  dbutils.getOne(db, id)
+  .then(function(doc){
+//    att = [];
+//    att.push({name:"AAA AAA"},{name:"BBB BBB"});
+//    doc.attendantees = att;
+    res.render('result.ect', {title: '集計', 'doc' : doc});
+  });
+});
+app.put('/kekka', function(req, res){
+	  var id = req.body.id;
+	  var kekkalist = req.body.kekkalist;
+	  var kekka = [];
+	  for( i = 0; i < kekkalist.length; i++) {
+	    if(kekkalist[i] !== "") {
+	      kekka.push(kekkalist[i]);
+	    }
+	  }
+	  dbutils.getOne(db, id)
+	  .then(function(doc){
+	    doc.kekkalist = kekka;
+	    return dbutils.insert(db, doc);
+	  }).then(function(doc){
+		  res.send("done");
+	  });
+	});
 //// Bind the '/login' URL
 //app.post('/login', function(req, res){
 //  var name = req.body.name;
